@@ -1,10 +1,11 @@
 from fastapi import Depends, HTTPException
+from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.api.models.users import User
+from app.apis.models.user import User
 from app.database import get_async_session
-from passlib.context import CryptContext
+
 
 class UserService:
     def __init__(self, session: AsyncSession = Depends(get_async_session)):
@@ -31,7 +32,5 @@ class UserService:
         await self.session.refresh(db_user)
         return db_user
 
-
     def verify_password(self, password: str, hashed_password: str) -> bool:
         return self.pwd_context.verify(password, hashed_password)
-

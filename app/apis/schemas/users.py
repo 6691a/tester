@@ -17,6 +17,7 @@ class CreateUserRequestSchema(BaseModel):
             }
         }
 
+
 class CreateUserResponseSchema(BaseModel):
     id: int
     username: str

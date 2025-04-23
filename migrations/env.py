@@ -8,7 +8,8 @@ from sqlmodel import SQLModel
 
 from alembic import context
 from app.config import settings
-from app.api.models.users import User  # Import models for auto-generation
+from app.apis.models.user import User  # Import models for auto-generation
+from app.apis.models.problem import Problem  # Import models for auto-generation
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -5,10 +5,10 @@ from app.apis.services.users import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+
 @router.post("/", response_model=CreateUserResponseSchema)
 async def create_user(
-    user: CreateUserRequestSchema,
-    service: UserService = Depends(UserService)
+    user: CreateUserRequestSchema, service: UserService = Depends(UserService)
 ) -> CreateUserResponseSchema:
     if not user.username or not user.password:
         raise HTTPException(status_code=400, detail="Username and password are required")

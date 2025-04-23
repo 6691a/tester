@@ -1,6 +1,10 @@
+from abc import ABC, abstractmethod
 from enum import IntEnum
 
-from langgraph.graph import MessagesState
+from langchain_core.language_models import BaseChatModel
+from langgraph.graph import Graph, MessagesState
+
+from app.apis.models.problem import Problem
 
 
 class Level(IntEnum):
@@ -33,6 +37,7 @@ class Level(IntEnum):
     - 간단한 문제 해결 능력
     - 예: 반복문으로 해결 가능한 기초 문제, 조건문 활용
     """
+
     EXPERT = 1
     ADVANCED = 2
     INTERMEDIATE_HIGH = 3
@@ -45,9 +50,43 @@ class Level(IntEnum):
     STARTER = 10
 
 
-
 class LevelAgentState(MessagesState):
+    level: Level = None
+    code_lang: str = None
+    text_lang: str = None
+    test: str = None
+    user_id: int = None
+    submissions: list = None
+    problems: list = None
+    assessment_mode: bool = False
+    scoring_mode: bool = False
+    recommendation_mode: bool = False
+
+
+class BaseProblemAgentState(MessagesState):
     level: Level
-    language: str
+    problem: Problem = None
+    code_lang: str
+    text_lang: str
 
 
+class BaseAgent(ABC):
+    graph_builder: Graph
+    llm: BaseChatModel
+
+    def __call__(self, *args, **kwargs):
+        self.setup_graph_node()
+        self.setup_graph_edge()
+        self.compile_graph = self.graph_builder.compile()
+
+    @abstractmethod
+    def setup_graph_node(self):
+        """
+        그래프 노드 설정
+        """
+
+    @abstractmethod
+    def setup_graph_edge(self):
+        """
+        그래프 엣지 설정
+        """

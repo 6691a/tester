@@ -1,6 +1,10 @@
+from typing import AsyncGenerator
+
 from fastapi import FastAPI
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from app.apis.routers.level import router as level_router
+from app.apis.routers.problem import router as problem_router
 from app.apis.routers.users import router as user_router
 from app.config import settings
 from app.database import get_async_session
@@ -15,10 +19,9 @@ app = FastAPI(
 # Include routers
 app.include_router(user_router, prefix=settings.API_PREFIX)
 app.include_router(level_router, prefix=settings.API_PREFIX)
+app.include_router(problem_router, prefix=settings.API_PREFIX)
 
 
 # Dependency to get DB session
-def get_session():
+def get_session() -> AsyncGenerator[AsyncSession, None]:
     return get_async_session()
-
-
